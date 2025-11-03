@@ -7,6 +7,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FTech_CoaxlinkEx;  // Euresys SDK Wrapper
 
+// Test할꺼야
+
 namespace HCameraTestProgram
 {
     public partial class MainWindow : Window
