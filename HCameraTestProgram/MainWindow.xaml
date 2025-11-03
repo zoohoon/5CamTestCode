@@ -1,0 +1,213 @@
+﻿<Window x:Class="HCameraTestProgram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MultiCam 2-1-2" Height="900" Width="1400" Background="#111">
+    <Grid Margin="12">
+        <!-- 3행 × 2열 -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 공통 리소스 -->
+        <Grid.Resources>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Background" Value="#1e1e1e"/>
+                <Setter Property="BorderBrush" Value="#2a2a2a"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.35" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="CamImage" TargetType="Image">
+                <Setter Property="Stretch" Value="Uniform"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="UseLayoutRounding" Value="True"/>
+            </Style>
+
+            <Style x:Key="Badge" TargetType="Border">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Background" Value="#66000000"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="Padding" Value="6,2"/>
+            </Style>
+
+            <Style x:Key="CtlButton" TargetType="Button">
+                <Setter Property="Margin" Value="6,0,0,0"/>
+                <Setter Property="Padding" Value="10,4"/>
+                <Setter Property="MinWidth" Value="72"/>
+            </Style>
+
+            <Style x:Key="CtlLabel" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#ddd"/>
+                <Setter Property="Margin" Value="8,0,0,0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="CtlRadio" TargetType="RadioButton">
+                <Setter Property="Foreground" Value="#ddd"/>
+                <Setter Property="Margin" Value="0,0,8,0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+
+        <!-- ===== CAM 1 (Top-Left) ===== -->
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card}">
+            <Grid>
+                <Image Style="{StaticResource CamImage}" Source="{Binding Cam1Source}"/>
+                <Border Style="{StaticResource Badge}">
+                    <TextBlock Text="CX 4" Foreground="#ddd" FontWeight="SemiBold"/>
+                </Border>
+
+                <!-- 컨트롤 바: Border로 감싸 Padding 적용 -->
+                <Border VerticalAlignment="Bottom" Background="#2a2a2a" Opacity="0.95" Padding="8">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <RadioButton x:Name="rbSoft1" Style="{StaticResource CtlRadio}" Content="SOFT"/>
+                            <RadioButton x:Name="rbRaw1"  Style="{StaticResource CtlRadio}" Content="RAW" IsChecked="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Style="{StaticResource CtlButton}" Content="Open"  Click="Open_Click"  Tag="3"/>
+                            <Button Style="{StaticResource CtlButton}" Content="Start" Click="Start_Click" Tag="3"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam1Model}"/>
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam1Serial}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ===== CAM 2 (Top-Right) ===== -->
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card}">
+            <Grid>
+                <Image Style="{StaticResource CamImage}" Source="{Binding Cam2Source}"/>
+                <Border Style="{StaticResource Badge}">
+                    <TextBlock Text="CX 1" Foreground="#ddd" FontWeight="SemiBold"/>
+                </Border>
+
+                <Border VerticalAlignment="Bottom" Background="#2a2a2a" Opacity="0.95" Padding="8">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <RadioButton x:Name="rbSoft2" Style="{StaticResource CtlRadio}" Content="SOFT"/>
+                            <RadioButton x:Name="rbRaw2"  Style="{StaticResource CtlRadio}" Content="RAW" IsChecked="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Style="{StaticResource CtlButton}" Content="Open"  Click="Open_Click"  Tag="0"/>
+                            <Button Style="{StaticResource CtlButton}" Content="Start" Click="Start_Click" Tag="0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam2Model}"/>
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam2Serial}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ===== CAM 3 (Middle, Span=2) ===== -->
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource Card}">
+            <Grid>
+                <Image Style="{StaticResource CamImage}" Source="{Binding Cam3Source}"/>
+                <Border Style="{StaticResource Badge}">
+                    <TextBlock Text="CX 5" Foreground="#ddd" FontWeight="SemiBold"/>
+                </Border>
+
+                <Border VerticalAlignment="Bottom" Background="#2a2a2a" Opacity="0.95" Padding="8">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <RadioButton x:Name="rbSoft3" Style="{StaticResource CtlRadio}" Content="SOFT"/>
+                            <RadioButton x:Name="rbRaw3"  Style="{StaticResource CtlRadio}" Content="RAW" IsChecked="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Style="{StaticResource CtlButton}" Content="Open"  Click="Open_Click"  Tag="4"/>
+                            <Button Style="{StaticResource CtlButton}" Content="Start" Click="Start_Click" Tag="4"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam3Model}"/>
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam3Serial}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ===== CAM 4 (Bottom-Left) ===== -->
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource Card}">
+            <Grid>
+                <Image Style="{StaticResource CamImage}" Source="{Binding Cam4Source}"/>
+                <Border Style="{StaticResource Badge}">
+                    <TextBlock Text="CX 3" Foreground="#ddd" FontWeight="SemiBold"/>
+                </Border>
+
+                <Border VerticalAlignment="Bottom" Background="#2a2a2a" Opacity="0.95" Padding="8">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <RadioButton x:Name="rbSoft4" Style="{StaticResource CtlRadio}" Content="SOFT"/>
+                            <RadioButton x:Name="rbRaw4"  Style="{StaticResource CtlRadio}" Content="RAW" IsChecked="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Style="{StaticResource CtlButton}" Content="Open"  Click="Open_Click"  Tag="2"/>
+                            <Button Style="{StaticResource CtlButton}" Content="Start" Click="Start_Click" Tag="2"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam4Model}"/>
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam4Serial}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ===== CAM 5 (Bottom-Right) ===== -->
+        <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource Card}">
+            <Grid>
+                <Image Style="{StaticResource CamImage}" Source="{Binding Cam5Source}"/>
+                <Border Style="{StaticResource Badge}">
+                    <TextBlock Text="CX 2" Foreground="#ddd" FontWeight="SemiBold"/>
+                </Border>
+
+                <Border VerticalAlignment="Bottom" Background="#2a2a2a" Opacity="0.95" Padding="8">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <RadioButton x:Name="rbSoft5" Style="{StaticResource CtlRadio}" Content="SOFT"/>
+                            <RadioButton x:Name="rbRaw5"  Style="{StaticResource CtlRadio}" Content="RAW" IsChecked="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Style="{StaticResource CtlButton}" Content="Open"  Click="Open_Click"  Tag="1"/>
+                            <Button Style="{StaticResource CtlButton}" Content="Start" Click="Start_Click" Tag="1"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam5Model}"/>
+                            <TextBlock Style="{StaticResource CtlLabel}" Text="{Binding Cam5Serial}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
